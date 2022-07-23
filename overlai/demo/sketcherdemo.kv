@@ -1,0 +1,56 @@
+<SketcherDemoAppRoot>:
+    sketcher_container: sketcher_container
+    canvas:
+        Color:
+            rgba: 0, 1, 1, 0.5
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    RelativeLayout:
+        BoxLayout:
+            orientation: "vertical"
+
+            AnchorLayout:
+                id: sketcher_container
+                anchor_x: "center"
+                anchor_y: "center"
+
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "40dp"
+                Button:
+                    text: "Center"
+                    on_release: app.reset_transformations()
+                Button:
+                    text: "Clear"
+                    on_release: app.clear_overlays()
+                Button:
+                    text: "Overlays"
+                    on_release: app.open_overlays_popup()
+                Button:
+                    text: "Pen"
+                    on_release: app.open_pen_popup()
+        BoxLayout:
+            id: pen_mode_dropdown_container
+            orientation: "vertical"
+            size_hint: None, None
+            width: "120dp"
+            pos_hint: {"y": 0.15, "right": 0.9}
+            padding: "10dp"
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, .5
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Label:
+                text: "Pen mode"
+                size_hint_y: None
+                height: "40dp"
+            Button:
+                id: pen_mode_dropdown_main_button
+                text: "Pen"
+                size_hint_y: None
+                height: "40dp"
+                on_release: app.open_pen_mode_dropdown()
