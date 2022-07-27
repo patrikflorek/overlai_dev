@@ -8,9 +8,21 @@ from kivy.uix.popup import Popup
 Builder.load_file("overlayspopup.kv")
 
 
+class OverlayItem(BoxLayout):
+    def __init__(self, overlay, **kwargs):
+        self.overlay = overlay
+        self.overlay_id = overlay.id
+        self.overlay_active = overlay.active
+        self.overlay_visible = int(overlay.opacity > 0)
+
+
 class OverlaysPopup(Popup):
     items_container = ObjectProperty()
 
-    def __init__(self, overlays, **kwargs):
+    def __init__(self, sketcher, **kwargs):
         super(OverlaysPopup, self).__init__(**kwargs)
-        print(overlays)
+        self.sketcher = sketcher
+       
+        for overlay in sketcher.:
+            item = OverlayItem(overlay)
+        

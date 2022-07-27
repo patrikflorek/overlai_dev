@@ -1,3 +1,32 @@
+<OverlayItem>:
+    overlay_id: ''
+    overlay_active: True
+    overlay_visible: True
+    orientation: "horizontal"
+    size_hint_y: None
+    height: "40dp"
+    ToggleButton:
+        text: "-" if self.state == "normal" else "A"
+        state: "down" if root.overlay_active else "normal"
+        size_hint_x: None
+        width: "32dp"
+        on_state: root.overlay_active = (self.stateu == "down")
+    ToggleButton:
+        text: "-" if self.state == "normal" else "A"
+        state: "down" if root.overlay_visible else "normal"
+        size_hint_x: None
+        width: "32dp"
+    Label:
+        text: root.overlay_id
+    Button:
+        text: "Clear"
+        size_hint_x: None
+        width: self.texture_size[0]
+    Button:
+        text: "Delete"
+        size_hint_x: None
+        width: self.texture_size[0]
+
 <OverlaysPopup>:
     items_container: items_container
     title: "Overlays settings"
@@ -9,12 +38,6 @@
             orientation: "vertical"
             spacing: "10dp"
             ScrollView:
-                canvas:
-                    Color:
-                        rgba: 1, 1, 0, 0.4
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
                 BoxLayout:
                     id: items_container
                     orientation: "vertical"

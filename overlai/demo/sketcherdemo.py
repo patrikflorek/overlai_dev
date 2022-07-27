@@ -63,7 +63,7 @@ class SketcherDemoApp(App):
     def on_start(self):
         print("on_start")
         self.pen_popup = PenPopup(pen)
-        self.overlays_popup = OverlaysPopup(self.sketcher.overlays_container.children)
+        self.overlays_popup = OverlaysPopup(self.sketcher)
 
     def reset_transformations(self):
         self.sketcher.apply_transform(self.sketcher.transform_inv)
