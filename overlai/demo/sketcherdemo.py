@@ -1,15 +1,19 @@
 from kivy.app import App
-from kivy.graphics.texture import Texture
 from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import Screen
 
 from PIL import Image as PILImage
 
-from sketcher.pen import Pen
+from demo.penmodedropdown import PenModeDropDown
+from demo.overlayspopup import OverlaysPopup
+from demo.penpopup import PenPopup
 
+from sketcher.pen import Pen
 from sketcher.sketcher import Sketcher
 
-pen = Pen(size=(40, 40), color=(255, 255, 0, 127), mode="pen")
+
+pen = Pen(size=(40, 40), color=(255, 255, 0, 127), mode="replace")
+
 
 SKETCHER_DATA = [
     {
@@ -27,9 +31,11 @@ SKETCHER_DATA = [
     {
         "id": "icecream",
         "bitmap": PILImage.open("demo/img/icecream_320x640.png"),
-        "pen": pen
+        "pen": pen,
+        "active": True
     }
 ]
+
 
 class SketcherDemoAppRoot(Screen):
     sketcher_container = ObjectProperty()
@@ -43,110 +49,43 @@ class SketcherDemoAppRoot(Screen):
         self.sketcher_container.add_widget(self.sketcher)
         self.sketcher.set_data(SKETCHER_DATA)
 
-        overlay = self.sketcher.overlays_container.children[0]
-        # overlay._draw_dot(0, 0)
-        # overlay._draw_dot(279, 0)
-        # overlay._draw_dot(279, 559)
-        # overlay._draw_dot(0, 559)
-        # overlay._draw_dot(139, 279)
-
 
 class SketcherDemoApp(App):
+    def __init__(self, **kwargs):
+        super(SketcherDemoApp, self).__init__(**kwargs)
+
     def build(self):
-        return SketcherDemoAppRoot()
+        root = SketcherDemoAppRoot()
+        self.sketcher = root.sketcher
+        self.sketcher_container = root.sketcher_container
+        return root
+
+    def on_start(self):
+        print("on_start")
+        self.pen_popup = PenPopup(pen)
+        self.overlays_popup = OverlaysPopup(self.sketcher.overlays_container.children)
 
     def reset_transformations(self):
-        print("reset_transformations")
-
-    def clear_overlays(self):
-        print("clear_overlays")
+        self.sketcher.apply_transform(self.sketcher.transform_inv)
+        self.sketcher.center = self.sketcher_container.center
 
     def open_overlays_popup(self):
         print("open_overlays_popup")
+        self.overlays_popup.open()
 
     def open_pen_popup(self):
-        print("open_pen_popup")
+        self.pen_popup.open() 
 
-    def open_pen_mode_dropdown(self):
-        print("open_pen_mode_dropdown")
+    def _set_pen_mode(self, instance, mode):
+        self.root.pen_mode_dropdown_main_button.text = mode.upper()
+        pen.mode = mode
+
+    def open_pen_mode_dropdown(self, instance):
+        dropdown = PenModeDropDown()
+        dropdown.container.padding = [0, "10dp"]
+        dropdown.bind(on_select=self._set_pen_mode)
+        dropdown.open(instance)
 
 
 if __name__ == "__main__":
     SketcherDemoApp().run()
-
-
-# from kivy.graphics.texture import Texture
-# from kivy.app import App
-# from kivy.properties import ObjectProperty
-# from kivy.uix.screenmanager import Screen
-
-# from PIL import Image as PILImage
-
-# from sketcher.sketcher import Sketcher
-
-# from sketcher.pen import Pen
-
-# SKETCHER_DATA = [
-#     {
-#         "id": "corals",
-#         "active": True,
-#         "opacity": 1.0,
-#         "bitmap": PILImage.open("demo/img/corals_320x640.png"),
-#         # "pen_bitmap": pen.bitmap,
-#         "pen_mode": "pen"
-#     },
-#     {
-#         "id": "octopus",
-#         "active": False,
-#         "opacity": 1.0,
-#         "bitmap": PILImage.open("demo/img/octopus_320x640.png"),
-#         # "pen_bitmap": pen.bitmap,
-#         "pen_mode": "pen"
-#     },
-#     {
-#         "id": "icecream",
-#         "active": False,
-#         "opacity": 1.0,
-#         "bitmap": PILImage.open("demo/img/icecream_320x640.png"),
-#         # "pen_bitmap": pen.bitmap,
-#         "pen_mode": "pen"
-#     }
-# ]
-
-# class SketcherDemoAppRoot(Screen):
-#     sketcher_container = ObjectProperty()
-    
-#     def __init__(self, **kwargs):
-#         super(SketcherDemoAppRoot, self).__init__(**kwargs)
-#         self.sketcher = Sketcher(
-#             background_color = (1, 0, 1, 0.4),
-#             size = (280, 560)
-#         )
-#         self.sketcher_container.add_widget(self.sketcher)
-#         # self.sketcher.set_data(SKETCHER_DATA)
-
-
-# class SketcherDemoApp(App):
-#     def build(self):
-#         return SketcherDemoAppRoot()
-
-#     def reset_transformations(self):
-#         print("reset_transformations")
-#         t = Texture.create(size=(100, 100))
-#         print("done")
-        
-#     def clear_overlays(self):
-#         print("clear_overlays")
-
-#     def open_overlays_popup(self):
-#         print("open_overlays_popup")
-
-#     def open_pen_popup(self):
-#         print("open_pen_popup")
-
-#     def open_pen_mode_dropdown(self):
-#         print("open_pen_mode_dropdown")
-
-
-# if __name__ == "__main__":
-#     SketcherDemoApp().run()

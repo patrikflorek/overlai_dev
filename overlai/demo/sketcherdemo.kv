@@ -1,5 +1,6 @@
 <SketcherDemoAppRoot>:
     sketcher_container: sketcher_container
+    pen_mode_dropdown_main_button: pen_mode_dropdown_main_button
     canvas:
         Color:
             rgba: 0, 1, 1, 0.5
@@ -20,11 +21,8 @@
                 size_hint_y: None
                 height: "40dp"
                 Button:
-                    text: "Center"
+                    text: "Reset"
                     on_release: app.reset_transformations()
-                Button:
-                    text: "Clear"
-                    on_release: app.clear_overlays()
                 Button:
                     text: "Overlays"
                     on_release: app.open_overlays_popup()
@@ -50,7 +48,7 @@
                 height: "40dp"
             Button:
                 id: pen_mode_dropdown_main_button
-                text: "Pen"
+                text: "REPLACE"
                 size_hint_y: None
                 height: "40dp"
-                on_release: app.open_pen_mode_dropdown()
+                on_release: app.open_pen_mode_dropdown(pen_mode_dropdown_container)

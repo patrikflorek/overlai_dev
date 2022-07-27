@@ -1,11 +1,10 @@
-from tkinter import Image
 from PIL import Image as PILImage
 from PIL import ImageDraw
 
 class Pen():
-    def __init__(self, size=(30, 30), color=(255, 255, 255, 255), mode="pen"):
-        self.size = size
-        self.color = color
+    def __init__(self, size=(30, 30), color=(255, 255, 255, 255), mode="replace"):
+        self._size = size
+        self._color = color
         self.mode = mode
         self._update_pen()
 
@@ -29,7 +28,7 @@ class Pen():
     @size.setter
     def size(self, value):
         self._size = value
-        self._update_pen
+        self._update_pen()
 
     @property
     def color(self):
@@ -38,4 +37,4 @@ class Pen():
     @color.setter
     def color(self, value):
         self._color = value
-        self._update_pen
+        self._update_pen()

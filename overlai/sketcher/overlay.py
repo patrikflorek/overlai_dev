@@ -1,8 +1,9 @@
-import PIL
+from PIL import Image as PILImage
 
 from kivy.uix.image import Image
-from kivy.graphics.texture import Texture
 from kivy.properties import ObjectProperty
+
+from sketcher.texture import bitmap_to_texture
 
 class Overlay(Image):
     bitmap = ObjectProperty()
@@ -42,26 +43,23 @@ class Overlay(Image):
 
         self.pen = data["pen"]
 
-    def _bitmap_to_texture(self, bitmap):
-        texture = Texture.create(bitmap.size, colorfmt="rgba")
-        flipped_bitmap = bitmap.transpose(PIL.Image.FLIP_TOP_BOTTOM)
-        texture.blit_buffer(flipped_bitmap.tobytes(), colorfmt="rgba")
-        return texture
+    def clear(self):
+        self.bitmap = PILImage.new("RGBA", self.bitmap.size)
 
     def on_bitmap(self, instance, bitmap):
-        self.texture = self._bitmap_to_texture(bitmap)
+        self.texture = bitmap_to_texture(bitmap)
 
     def _draw_dot(self, x, y):
         pen_width, pen_height = self.pen.size
         pen_x = x - pen_width // 2
         pen_y = self.height - y - pen_height // 2 - 1
-        if self.pen.mode == "pen":
+        if self.pen.mode == "replace":
             self.bitmap.paste(self.pen.bitmap, (pen_x, pen_y), self.pen.pen_mask)
         
-        if self.pen.mode == "eraser":
+        if self.pen.mode == "erase":
             self.bitmap.paste(self.pen.eraser_bitmap, (pen_x, pen_y), self.pen.pen_mask)
         
-        self.texture = self._bitmap_to_texture(self.bitmap)
+        self.texture = bitmap_to_texture(self.bitmap)
 
     def _draw_line(self, x, y, prev_x, prev_y):
         pen_width, pen_height = self.pen.size
@@ -80,21 +78,13 @@ class Overlay(Image):
             pen_x_i = x_i - pen_width // 2
             pen_y_i = self.height - y_i - pen_height // 2 - 1
             
-            if self.pen.mode == "pen":
+            if self.pen.mode == "replace":
                 self.bitmap.paste(self.pen.bitmap, (pen_x_i, pen_y_i), self.pen.pen_mask)
         
-            if self.pen.mode == "eraser":
+            if self.pen.mode == "erase":
                 self.bitmap.paste(self.pen.eraser_bitmap, (pen_x_i, pen_y_i), self.pen.pen_mask)
         
-
-            # self._draw_dot(x_i, y_i)
-            # if self.pen.mode == "pen":
-            #     self.bitmap.paste(self.pen.bitmap, (x_i, self.height - y_i - 1), self.pen.bitmap)
-        
-            # if self.pen.mode == "eraser":
-            #     self.bitmap.paste(self.pen.eraser_bitmap, (x_i, self.height - y_i - 1), self.pen.bitmap)
-
-        self.texture = self._bitmap_to_texture(self.bitmap)
+        self.texture = bitmap_to_texture(self.bitmap)
 
     def on_touch_move(self, touch):
         if not self.active:

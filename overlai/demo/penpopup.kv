@@ -1,0 +1,159 @@
+# Pen size slider
+
+<PenSizeSliderBox@BoxLayout>:
+    pen_size_slider: pen_size_slider
+    pen_size: 40
+    orientation: "vertical"
+    size_hint_y: None
+    height: "60dp"
+    Label:
+        text: f"Size: {int(pen_size_slider.value)}"
+        text_size: self.size
+        halign: "left"
+        valign: "middle"
+        size_hint_y: None
+        height: "28dp"
+    BoxLayout:
+        orientation: "horizontal"
+        Label:
+            text: str(int(pen_size_slider.min))
+            font_size: "14dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            size_hint_x: None
+            width: "40dp"
+        Slider:
+            id: pen_size_slider
+            min: 1
+            max: 60
+            step: 1
+            value: root.pen_size
+        Label:
+            text: str(int(pen_size_slider.max))
+            font_size: "14dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            size_hint_x: None
+            width: "40dp"
+
+
+# Pen colors palette
+
+<PenColorSwatchBoxButton@ButtonBehavior+Image>:
+
+<PenColorSwatchBox>:
+    swatch_button: swatch_button
+    selected: False
+    color: 0, 0, 0
+    padding: "5dp"
+    PenColorSwatchBoxButton:
+        id: swatch_button
+        color: root.color
+
+<PenColorPaletteBox>:
+    swatches_container: swatches_container
+    orientation: "vertical"
+    size_hint_y: None
+    height: "120dp"
+    Label:
+        text: "Color:"
+        text_size: self.size
+        halign: "left"
+        valign: "middle"
+        size_hint_y: None
+        height: "28dp"
+    GridLayout:
+        id: swatches_container
+        cols: 4
+        spacing: "5dp"
+
+
+# Pen alpha slider
+
+<PenAlphaSliderBox@BoxLayout>:
+    pen_alpha_slider: pen_alpha_slider
+    pen_alpha: 1.0
+    orientation: "vertical"
+    size_hint_y: None
+    height: "60dp"
+    Label:
+        text: f"Alpha: {pen_alpha_slider.value:.2f}"
+        text_size: self.size
+        halign: "left"
+        valign: "middle"
+        size_hint_y: None
+        height: "28dp"
+    BoxLayout:
+        orientation: "horizontal"
+        Label:
+            text: str(int(pen_alpha_slider.min))
+            font_size: "14dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            size_hint_x: None
+            width: "40dp"
+        Slider:
+            id: pen_alpha_slider
+            min: 0.0
+            max: 1.0
+            step: 0.01
+            value: root.pen_alpha
+        Label:
+            text: str(int(pen_alpha_slider.max))
+            font_size: "14dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            size_hint_x: None
+            width: "40dp"
+
+
+# Pen preview
+
+<PenPreviewBox>:
+    preview_image: preview_image
+    orientation: "vertical"
+    Label:
+        text: "Preview:"
+        text_size: self.size
+        halign: "left"
+        valign: "middle"
+        size_hint_y: None
+        height: "28dp"
+    AnchorLayout:
+        Image:
+            id: preview_image
+            size_hint: None, None
+            size: (0, 0)
+  
+
+# Pen settings popup
+
+<PenPopup>:
+    size_slider: size_slider
+    colors_palette: colors_palette
+    alpha_slider: alpha_slider
+    preview: preview
+    title: "Pen settings"
+    size_hint_y: 0.9
+    BoxLayout:
+        orientation: "vertical"
+        padding: "10dp"
+        spacing: "20dp"
+        PenSizeSliderBox:
+            id: size_slider
+        PenColorPaletteBox:
+            id: colors_palette
+        PenAlphaSliderBox:
+            id: alpha_slider
+        PenPreviewBox:
+            id: preview
+        Button:
+            text: "Close"
+            size_hint_y: None
+            height: "40dp"
+            on_release: root.dismiss() 
+            

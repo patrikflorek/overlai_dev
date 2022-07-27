@@ -1,0 +1,36 @@
+<OverlaysPopup>:
+    items_container: items_container
+    title: "Overlays settings"
+    size_hint_y: 0.9
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "20dp"
+        BoxLayout:
+            orientation: "vertical"
+            spacing: "10dp"
+            ScrollView:
+                canvas:
+                    Color:
+                        rgba: 1, 1, 0, 0.4
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                BoxLayout:
+                    id: items_container
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: "10dp"
+                    spacing: "5dp"
+            Button:
+                text: "New overlay"
+                size_hint_y: None
+                height: "40dp"
+                size_hint_x: None
+                width: "200dp"
+                pos_hint: {"center_x": 0.5}
+        Button:
+            text: "Close"
+            on_release: root.dismiss()
+            size_hint_y: None
+            height: "40dp"
